@@ -3,9 +3,10 @@
 
 class word {
 public:
-	word(std::string name);
+	word(std::string name, int id);
 	~word();
 	std::string getName();
+	int getId();
 	void addConnection(word* connection);
 	const void printName();
 	const void printDots();
@@ -22,6 +23,7 @@ public:
 
 private:
 	std::string _name;
+	int _id;
 	std::vector<word*> _connections;
 	bool _guessed{false};
 	bool _available{false};

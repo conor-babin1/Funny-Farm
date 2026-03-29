@@ -1,14 +1,20 @@
 #include "word.h"
+#include "nlohmann/json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
 
 void printBoard(const std::vector<word*> words);
 void printConnections(word* item);
-std::vector<word*> createWords();
+//std::vector<word*> createWords();
+std::vector<word*> loadWordsFromJson(const std::string& filename);
 
 int word::_objCount = 0;
 
 int main() {
 	// Add preset words
-	std::vector<word*> words = createWords();
+	//std::vector<word*> words = createWords();
+	std::vector<word*> words = loadWordsFromJson("farm.json");
 
 	int count = 0;
 	printBoard(words);
@@ -35,6 +41,58 @@ int main() {
 	}
 	std::cout << "WINNER WINNER CHICKEN DINNER!" << std::endl;
 	return 0;
+}
+
+std::vector<word*> loadWordsFromJson(const std::string& filename)
+{
+	std::ifstream inFile(filename);
+	if (!inFile.is_open())
+	{
+		throw std::runtime_error("Could not open file: " + filename);
+	}
+
+	json j;
+	inFile >> j;
+
+	// Load nodes
+	std::vector<word*> words;
+	for (const auto& nodeJson : j.at("nodes")) {
+		int id = nodeJson.at("id").get<int>();
+		std::string name = nodeJson.at("name").get<std::string>();
+		word* obj = new word(name, id);
+		words.push_back(obj);
+	}
+
+	// Load edges
+	for (const auto& edgeJson : j.at("edges"))
+	{
+		int sourceId = edgeJson.at("source").get<int>();
+		int targetId = edgeJson.at("target").get<int>();
+		for(int i = 0; i < words.size(); i++) {
+			if(words[i]->getId() == sourceId) {
+				bool found = false;
+				for(int j = 0; j < words.size(); j++) {
+					if(words[j]->getId() == targetId) {
+						words[i]->addConnection(words[j]);
+						found = true;
+						break;
+					}
+				}
+				if(!found) {
+					std::cout << "Could not find target for edge: " << sourceId << " to " << targetId << std::endl;
+				}
+				break;
+			}
+			std::cout << "Could not find source for edge: " << sourceId << " to " << targetId << std::endl;
+		}
+	}
+	// make 1st word set
+	words[0]->guess();
+        words[0]->available();
+        words[0]->makeConnectionsAvailable();
+	
+	return words;
+
 }
 
 void printBoard(const std::vector<word*> words) {
@@ -89,7 +147,7 @@ void printConnections(word* item) {
 }
 
 // TODO read from csv
-std::vector<word*> createWords() {
+/*std::vector<word*> createWords() {
 	std::vector<word*> words;
 	word* onTheFarm = new word("On The Farm");
 
@@ -146,4 +204,4 @@ std::vector<word*> createWords() {
 
         cow->addConnection(bell);
 	return words;
-}
+}*/

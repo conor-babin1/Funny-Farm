@@ -1,0 +1,16 @@
+{
+  "metaRegex": "farm",
+  "nodes": [
+    {"id": 1, "name": "On The Farm"},
+    {"id": 2, "name": "horse"},
+    {"id": 3, "name": "saddle"},
+    {"id": 4, "name": "cowboy"},
+    {"id": 5, "name": "lasso"}
+  ],
+  "edges": [
+    {"source": 1, "target": 2},
+    {"source": 2, "target": 3},
+    {"source": 2, "target": 4},
+    {"source": 4, "target": 5}
+  ]
+}

@@ -1,6 +1,6 @@
 #include "word.h"
 
-word::word(std::string name) : _name(name)
+word::word(std::string name, int id) : _name(name), _id(id)
 {
 	++_objCount;
 }
@@ -13,6 +13,10 @@ word::~word(){}
 
 std::string word::getName() {
 	return _name;
+}
+
+int word::getId() {
+	return _id;
 }
 
 void word::addConnection(word* connection) {
