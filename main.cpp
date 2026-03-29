@@ -7,21 +7,24 @@ std::vector<word*> createWords();
 int word::_objCount = 0;
 
 int main() {
-
+	// Add preset words
 	std::vector<word*> words = createWords();
 
 	int count = 0;
 	printBoard(words);
+	// get count for number of words instantiated
 	int objCount = word::getObjCount();
 	while (count < objCount - 1) {
 		std::string guess;
 		std::cout << "Guess: ";
 		std::cin >> guess;
+		// allow users to exit
 		if(guess == "STOP") {
 			return 0;
 		}
 		for (word* val : words) {
 			if(val->getName() == guess && val->getAvailable()) {
+				// correct guess, make the word guess and make all the connections print
 				val->guess();
 				val->makeConnectionsAvailable();
 				count++;
@@ -35,6 +38,8 @@ int main() {
 }
 
 void printBoard(const std::vector<word*> words) {
+	// clearing console
+	std::cout << "\033[2J\033[1;1H";
 	for(word* val : words) {
 		if(val->getAvailable()) {
 			if(val->getGuessed() && !val->getPrinted()) {
@@ -58,6 +63,7 @@ void printBoard(const std::vector<word*> words) {
 void printConnections(word* item) {
         bool newline = false;
         std::vector<word*> connections = item->getConnections();
+	// two loops to ensure dots are printed before future words
         for(int i = 0; i < connections.size(); i++) {
                 if (!connections[i]->getGuessed() && !connections[i]->getPrinted()) {
                         connections[i]->printDots();
@@ -82,6 +88,7 @@ void printConnections(word* item) {
         }
 }
 
+// TODO read from csv
 std::vector<word*> createWords() {
 	std::vector<word*> words;
 	word* onTheFarm = new word("On The Farm");
