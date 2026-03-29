@@ -37,7 +37,15 @@ const void word::printName() {
 
 const void word::printDots() {
 	for(int i = 0; i < _name.length(); i++) {
-		std::cout << ".";
+		if(_name[i] == ' ') {
+			std::cout << " ";
+		}
+		else if (_name[i] == '-') {
+			std::cout << "-";
+		}
+		else {
+			std::cout << ".";
+		}
 	}
 	std::cout << std::endl;
 }

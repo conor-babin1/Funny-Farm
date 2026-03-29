@@ -21,12 +21,16 @@ int main() {
 	// get count for number of words instantiated
 	int objCount = word::getObjCount();
 	while (count < objCount - 1) {
+		std::cout << "count: " << count << " num: " << objCount - 1 << std::endl;
 		std::string guess;
 		std::cout << "Guess: ";
-		std::cin >> guess;
+		std::getline(std::cin, guess);
 		// allow users to exit
 		if(guess == "STOP") {
 			return 0;
+		}
+		for(auto& c : guess) {
+			c = std::tolower(c);
 		}
 		for (word* val : words) {
 			if(val->getName() == guess && val->getAvailable()) {
