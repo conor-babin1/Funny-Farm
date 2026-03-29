@@ -56,28 +56,30 @@ void printBoard(const std::vector<word*> words) {
 }
 
 void printConnections(word* item) {
-	bool newline = false;
-	std::vector<word*> connections = item->getConnections();
+        bool newline = false;
+        std::vector<word*> connections = item->getConnections();
         for(int i = 0; i < connections.size(); i++) {
-		std::vector<word*> multiConn;
-        	if(connections[i]->getGuessed() && !connections[i]->getPrinted()) {
-                	connections[i]->printName();
-                	connections[i]->setPrinted(1);
-			multiConn.push_back(connections[i]);
-			newline = true;
+                if (!connections[i]->getGuessed() && !connections[i]->getPrinted()) {
+                        connections[i]->printDots();
+                        connections[i]->setPrinted(1);
+                        newline = true;
                 }
-                else if (!connections[i]->getPrinted()) {
-                	connections[i]->printDots();
-                	connections[i]->setPrinted(1);
-			newline = true;
-		}
+        }
+	for(int i = 0; i < connections.size(); i++) {
+                std::vector<word*> multiConn;
+                if(connections[i]->getGuessed() && !connections[i]->getPrinted()) {
+                        connections[i]->printName();
+                        connections[i]->setPrinted(1);
+                        multiConn.push_back(connections[i]);
+                        newline = true;
+                }
 		for(word* multi : multiConn) {
-			printConnections(multi);
-		}
+                        printConnections(multi);
+                }
 	}
-	if(newline) {
-		std::cout << std::endl;
-	}
+        if(newline) {
+                std::cout << std::endl;
+        }
 }
 
 std::vector<word*> createWords() {
